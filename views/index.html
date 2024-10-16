@@ -1,0 +1,179 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head> 
+    <title>SVG Tracer</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/client.js" defer></script>
+    
+    <script src="/imagetracer_v1.2.4.js"></script>
+    
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    
+  </head>
+  <body>
+    <main>   
+      
+  <div id="smallOverview">
+  <h1>
+    SVG Tracer
+    </h1>
+      <p>
+         SVG Tracer is a tool for creating scalable vector graphics (SVG) from images of packaging templates, crease patterns, and more! 
+      </p>
+      <div class="iframeContainer">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/heXTUXFggQI?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="video"></iframe>
+      </div>
+     
+      <p>
+        It works best on desktop, so open it on a larger screen to get started.
+      </p>
+    <p>
+      You can read more about how to use SVG Tracer and how it works <a href="https://medium.com/@scientiffic/svg-tracer-generating-useful-svgs-for-packaging-design-5c344dd14b0b" target="_blank">on Medium</a>.
+    </p>
+    </div>
+    
+      <div id="instructions">
+        <h1>
+          SVG Tracer
+        </h1>
+        <p>
+          SVG Tracer is a tool for creating scalable vector graphics (SVG) from images of packaging templates, crease patterns, and more! 
+        </p>
+        
+        <p>
+          Upload a bitmap image (.jpg, .png, etc.) to start processing.
+        </p>
+        <p>
+          For more about how to use SVG tracer, see full instructions <a href="https://medium.com/@scientiffic/svg-tracer-generating-useful-svgs-for-packaging-design-5c344dd14b0b" target="_blank">on Medium</a>.
+        </p>
+      </div>
+      <div id="content">
+        <h3>
+          Input
+        </h3>  
+        <div class="input">
+            <input id="imgFile" type="file" name="file" onchange="beginLoad()"/>   
+        <p class="note">
+          Upload a bitmap image containing only the solid and dashed lines you want to convert to SVG paths. 
+        </p>
+        <p>
+          (As an example, try uploading this <a href="https://cdn.glitch.com/a953a0b7-25df-4ce8-a9fd-541788b8c091%2Farc.png?1533755266901" target="_blank">image</a> for a curved box)
+        </p>
+          
+        </div>  
+
+        <h3 class="outputLabel">
+          Output
+        </h3>
+        
+        <div class="loadingImg">
+          <img src="https://cdn.glitch.com/a953a0b7-25df-4ce8-a9fd-541788b8c091%2Fprocessing.gif?1533750217561">
+        </div>
+        
+        <div class="output">
+          <div id="potraceOutput">
+            <div class="compiled">
+              <button class="export">Export SVG</button>
+              <div class="container"></div>
+            </div>
+
+            <button class="showIndivPaths">
+                <icon class="fa fa-eye"></icon> <span class="text">Show Individual Paths</span>
+            </button>
+            
+            <div class="indivPaths">              
+              <div class="full path">
+                <div class="category">Original SVG</div>
+                <div class="container"></div>
+              </div>
+              
+              <div class="cut path">
+                <div class="category">Cut Path</div>
+                <div class="container"></div>
+              </div>
+
+              <div class="score path">
+                <div class="category">Score Path</div>
+                <div class="container"></div>
+              </div>
+            </div>
+
+          </div>  
+        </div>
+        
+      </div>      
+    </main>
+<footer>
+        Built by <a href="https://twitter.com/scientiffic" target="_blank">@scientiffic</a> at <a href="https://www.recurse.com/" target="_blank">Recurse</a>.
+</footer>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+  
+  
+  </body>
+</html>
+
+<script src="https://button.glitch.me/button.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-123686849-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-123686849-1');
+</script>
+
+  
+<script>  
+  $(function(){
+    if($(window).width() < 500){
+      $('div').not('#smallOverview').not('.iframeContainer').hide();
+      $('#smallOverview').show();
+    }
+
+    $('.export').on('click', function(){
+      var downloadLink = document.createElement('a');
+      downloadLink.download = 'trace.svg';
+      downloadLink.href = "data:image/svg+xml," + (new XMLSerializer).serializeToString($('.compiled svg')[0]);
+      console.log(downloadLink.href);
+      downloadLink.click();
+    });
+
+  $('.showIndivPaths').on('click', function(){
+    
+    $('.indivPaths').fadeIn();
+    $('.path').each(function(){
+      $(this).css('maxHeight', null);
+    });
+    
+    $(this).remove();
+  });
+  });
+</script>
+  
