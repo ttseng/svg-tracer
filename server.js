@@ -17,6 +17,7 @@ const ClipperLib = require('clipper-lib');
 var point = require('point-at-length');
 var DOMParser = require('xmldom').DOMParser;
 const getBounds = require('svg-path-bounds');
+const path = require('path')
 
 var scale = 100;
 var port = 3000;
@@ -25,13 +26,13 @@ var port = 3000;
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(fileUpload());
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/index.html');
+  response.sendFile(__dirname + '/views/index.html');
 });
 
 // listen for requests :)
